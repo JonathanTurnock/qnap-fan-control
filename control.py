@@ -1,10 +1,9 @@
 import configparser
 import logging
+import logging.config
 import os
 import re
 import subprocess
-
-LOGGING_FORMAT = "[%(asctime)s] [%(levelname)s] [%(name)s] - %(message)s"
 
 
 # Generic System Execution Methods
@@ -142,7 +141,7 @@ class Profile:
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read(os.path.dirname(os.path.realpath(__file__)) + "/settings.ini")
-    logging.basicConfig(format=LOGGING_FORMAT, level=config["LOGGING"]["level"])
+    logging.config.fileConfig(os.path.dirname(os.path.realpath(__file__)) + "/settings.ini")
     logging.info("Starting Fan Control")
     profile = Profile(
         int(config["PROFILE"]["0"]),
@@ -165,5 +164,6 @@ if __name__ == '__main__':
         logging.info("CPU_TEMP:%s|SYS_TEMP:%s|PROFILE:%s" % (current_cpu_temp, current_system_temp, target_fan_profile))
         logging.info("Fan Speeds: %s" % (",".join(str(rpm) for rpm in get_all_fans_rpm()),))
     except Exception as e:
-        logging.error("An Exception occurred while setting the profile, activating profile 7!", e)
+        logging.error("An Exception occurred while setting the profile, activating profile 7!")
+        logging.error(e)
         set_all_fans_profile(7)
