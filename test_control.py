@@ -20,6 +20,10 @@ class TestGet_system_temp(TestCase):
         control.execute.return_value = "4"
         assert control.get_fan_count() == 4
 
+    def test_get_fan_rpm(self):
+        control.execute.return_value = "6200 RPM"
+        assert control.get_fan_rpm(1) == 6200
+
     def test_profile_returns_correct_mode_at_65(self):
         profile = control.Profile(40, 50, 60, 70, 75, 80, 85, 90)
         assert profile.get_fan_mode(65) == 3
