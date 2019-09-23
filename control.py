@@ -1,5 +1,6 @@
 import configparser
 import logging
+import os
 import re
 import subprocess
 
@@ -64,7 +65,7 @@ def set_fan_profile(fan, profile):
     :return: N/A
     '''
     logging.debug("Setting Fan %s to Profile %s" % (fan, profile))
-    execute("hal_app --se_sys_set_fan_mode obj_index=%s,mode=%s" % (fan-1, profile))
+    execute("hal_app --se_sys_set_fan_mode obj_index=%s,mode=%s" % (fan - 1, profile))
 
 
 def set_all_fans_profile(profile):
@@ -76,6 +77,7 @@ def set_all_fans_profile(profile):
     logging.debug("Setting all fans to Profile %s" % (profile,))
     for i in range(1, get_fan_count()):
         set_fan_profile(i, profile)
+
 
 def get_all_fans_rpm():
     logging.debug("Getting all fans RPM")
@@ -139,7 +141,7 @@ class Profile:
 
 if __name__ == '__main__':
     config = configparser.ConfigParser()
-    config.read("settings.ini")
+    config.read(os.path.dirname(os.path.realpath(__file__)) + "/settings.ini")
     logging.basicConfig(format=LOGGING_FORMAT, level=config["LOGGING"]["level"])
     logging.info("Starting Fan Control")
     profile = Profile(
