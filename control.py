@@ -14,7 +14,7 @@ def execute(command):
     :return: The output from the command as a string
     '''
     logging.debug("Executing Command '%s'" % (command,))
-    return subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True).decode()
+    return subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True).decode().strip()
 
 
 # System Wide Metrics
@@ -74,14 +74,14 @@ def set_all_fans_profile(profile):
     :return: N/A
     '''
     logging.debug("Setting all fans to Profile %s" % (profile,))
-    for i in range(1, get_fan_count()):
+    for i in range(1, get_fan_count() + 1):
         set_fan_profile(i, profile)
 
 
 def get_all_fans_rpm():
     logging.debug("Getting all fans RPM")
     rpms = []
-    for i in range(1, get_fan_count()):
+    for i in range(1, get_fan_count() + 1):
         rpms.append(get_fan_rpm(i))
     return rpms
 
